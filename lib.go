@@ -54,7 +54,7 @@ func WriteRandomFiles(root string, depth int, opts *Options) error {
 }
 
 var FilenameSize = 16
-var RunesEasy = []rune("abcdefghijklmnopqrstuvwxyz01234567890-_")
+var RunesEasy = []rune("abcdefghijklmnopqrstuvwxyz01234567890")
 var RunesHard = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890!@#$%^&*()-_+= ;.,<>'\"[]{}() ")
 
 func RandomFilename(length int, alphabet []rune) string {
