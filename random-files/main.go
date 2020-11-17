@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	randomfiles "github.com/jbenet/go-random-files"
+	randomfiles "github.com/JeanChristopheMorinPerso/go-random-files"
 	ringreader "github.com/jbenet/go-random-files/ringreader"
 )
 
