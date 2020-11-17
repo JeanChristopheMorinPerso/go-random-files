@@ -81,10 +81,6 @@ func WriteRandomFile(root string, opts *Options) error {
 		return err
 	}
 
-	if _, err := io.CopyN(f, opts.Source, filesize); err != nil {
-		return err
-	}
-
 	if opts.Out != nil {
 		fmt.Fprintln(opts.Out, filepath)
 	}

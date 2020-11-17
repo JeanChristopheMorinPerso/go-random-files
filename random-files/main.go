@@ -1,7 +1,6 @@
 package main
 
 import (
-	crand "crypto/rand"
 	"errors"
 	"flag"
 	"fmt"
@@ -10,7 +9,6 @@ import (
 	"time"
 
 	randomfiles "github.com/JeanChristopheMorinPerso/go-random-files"
-	ringreader "github.com/jbenet/go-random-files/ringreader"
 )
 
 var usage = `usage: %s [options] <path>...
@@ -74,20 +72,6 @@ func parseArgs() error {
 		rand.Seed(time.Now().UnixNano())
 	default:
 		rand.Seed(opts.RandomSeed)
-	}
-
-	// prepare randomn source.
-	if cryptorand {
-		opts.Source = crand.Reader
-	} else {
-		// if not crypto, we don't need a lot of random
-		// data. we just need to sample from a sequence.
-		s := 16777216 // 16MB
-		r, err := ringreader.NewReader(s)
-		if err != nil {
-			return err
-		}
-		opts.Source = r
 	}
 
 	return nil
