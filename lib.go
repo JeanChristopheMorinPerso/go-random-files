@@ -12,8 +12,9 @@ type Options struct {
 	Out    io.Writer // output progress
 	Source io.Reader // randomness source
 
-	FileSize int    // the size per file.
-	Alphabet []rune // for filenames
+	FileSize     int // the size per file.
+	FilenameSize int
+	Alphabet     []rune // for filenames
 
 	FanoutDepth int // how deep the hierarchy goes
 	FanoutFiles int // how many files per dir
@@ -53,14 +54,15 @@ func WriteRandomFiles(root string, depth int, opts *Options) error {
 	return nil
 }
 
-var FilenameSize = 16
 var RunesEasy = []rune("abcdefghijklmnopqrstuvwxyz01234567890")
 var RunesHard = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890!@#$%^&*()-_+= ;.,<>'\"[]{}() ")
 
 func RandomFilename(length int, alphabet []rune) string {
 	b := make([]rune, length)
+	alphabetLength := len(alphabet)
+
 	for i := range b {
-		b[i] = alphabet[rand.Intn(len(alphabet))]
+		b[i] = alphabet[rand.Intn(alphabetLength)]
 	}
 	return string(b)
 }
@@ -71,7 +73,7 @@ func WriteRandomFile(root string, opts *Options) error {
 		filesize = rand.Int63n(filesize) + 1
 	}
 
-	n := rand.Intn(FilenameSize-4) + 4
+	n := rand.Intn(opts.FilenameSize-4) + 4
 	name := RandomFilename(n, opts.Alphabet)
 	filepath := path.Join(root, name)
 	f, err := os.Create(filepath)
@@ -95,7 +97,7 @@ func WriteRandomDir(root string, depth int, opts *Options) error {
 		return nil
 	}
 
-	n := rand.Intn(FilenameSize-4) + 4
+	n := rand.Intn(opts.FilenameSize-4) + 4
 	name := RandomFilename(n, opts.Alphabet)
 	root = path.Join(root, name)
 	if err := os.MkdirAll(root, 0755); err != nil {
