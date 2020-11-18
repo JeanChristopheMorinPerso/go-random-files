@@ -14,6 +14,7 @@ type Options struct {
 
 	FileSize     int // the size per file.
 	FilenameSize int
+	MaxFiles     int64  // max number of files to create
 	Alphabet     []rune // for filenames
 
 	FanoutDepth int // how deep the hierarchy goes
@@ -25,6 +26,10 @@ type Options struct {
 	RandomFanout bool  // randomize fanout numbers
 }
 
+var RunesEasy = []rune("abcdefghijklmnopqrstuvwxyz01234567890")
+var RunesHard = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890!@#$%^&*()-_+= ;.,<>'\"[]{}() ")
+
+var filesCreated = int64(0)
 func WriteRandomFiles(root string, depth int, opts *Options) error {
 
 	numfiles := opts.FanoutFiles
@@ -33,6 +38,9 @@ func WriteRandomFiles(root string, depth int, opts *Options) error {
 	}
 
 	for i := 0; i < numfiles; i++ {
+		if filesCreated >= opts.MaxFiles {
+			return nil
+		}
 		if err := WriteRandomFile(root, opts); err != nil {
 			return err
 		}
@@ -45,6 +53,9 @@ func WriteRandomFiles(root string, depth int, opts *Options) error {
 		}
 
 		for i := 0; i < numdirs; i++ {
+			if filesCreated >= opts.MaxFiles {
+				return nil
+			}
 			if err := WriteRandomDir(root, depth+1, opts); err != nil {
 				return err
 			}
@@ -53,9 +64,6 @@ func WriteRandomFiles(root string, depth int, opts *Options) error {
 
 	return nil
 }
-
-var RunesEasy = []rune("abcdefghijklmnopqrstuvwxyz01234567890")
-var RunesHard = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890!@#$%^&*()-_+= ;.,<>'\"[]{}() ")
 
 func RandomFilename(length int, alphabet []rune) string {
 	b := make([]rune, length)
@@ -84,6 +92,8 @@ func WriteRandomFile(root string, opts *Options) error {
 	if opts.Out != nil {
 		fmt.Fprintln(opts.Out, filepath)
 	}
+
+	filesCreated++
 
 	return f.Close()
 }

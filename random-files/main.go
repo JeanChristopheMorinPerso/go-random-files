@@ -39,6 +39,7 @@ func init() {
 	flag.IntVar(&opts.FanoutDirs, "dirs", 5, "fanout dirs - number of dirs per dir (or max)")
 	flag.IntVar(&opts.FanoutFiles, "files", 10, "fanout files - number of files per dir (or max")
 	flag.IntVar(&opts.FilenameSize, "filename-size", 16, "Max filename size")
+	flag.Int64Var(&opts.MaxFiles, "max-files", 1000000, "max number of files to create")
 
 	flag.Int64Var(&opts.RandomSeed, "seed", 0, "random seed - 0 for current time")
 	flag.BoolVar(&opts.RandomFanout, "random-fanout", false, "randomize fanout numbers")
